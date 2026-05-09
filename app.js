@@ -374,6 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     'https://www.france24.com/fr/eco-tech/rss',
                     'https://www.latribune.fr/feed.xml'
                 ];
+            } else if (category === 'bourse') {
+                rssUrls = [
+                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
+                    'https://www.tradingsat.com/flux-rss/news-bourse.xml',
+                    'https://www.boursorama.com/bourse/actualites/flux-rss/'
+                ];
             } else if (category === 'people') {
                 rssUrls = [
                     'https://www.20minutes.fr/feeds/rss-people.xml',
