@@ -505,7 +505,8 @@ refreshBtn.addEventListener('click', () => {
 const notifBtn = document.getElementById('notif-btn');
 
 function updateNotifUI() {
-    if (Notification.permission === 'granted') {
+    const isEnabled = localStorage.getItem('notifs-enabled') === 'true';
+    if (Notification.permission === 'granted' && isEnabled) {
         notifBtn.classList.add('active');
         notifBtn.innerHTML = '<i class="ri-notification-3-fill"></i>';
     } else {
@@ -516,27 +517,39 @@ function updateNotifUI() {
 
 notifBtn.addEventListener('click', () => {
     if (!('Notification' in window)) {
-        alert('Les notifications ne sont pas supportées sur ce navigateur (ou mode incognito).');
+        alert('Les notifications ne sont pas supportées sur ce navigateur.');
         return;
     }
 
     if (Notification.permission === 'granted') {
-        new Notification('Global News', { body: 'Les notifications sont déjà actives !' });
+        // Toggle interne
+        const currentState = localStorage.getItem('notifs-enabled') === 'true';
+        localStorage.setItem('notifs-enabled', !currentState);
         updateNotifUI();
+        
+        if (!currentState) {
+            new Notification('Global News', { body: 'Notifications activées !' });
+        }
     } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(perm => {
             if (perm === 'granted') {
+                localStorage.setItem('notifs-enabled', 'true');
                 new Notification('Global News', { body: 'Notifications activées !' });
             }
             updateNotifUI();
         });
     } else {
-        alert('Les notifications sont bloquées. Veuillez les activer dans les réglages de votre navigateur.');
+        alert('Les notifications sont bloquées. Veuillez les activer dans les réglages de votre appareil.');
     }
 });
 
-// Initial state
-if ('Notification' in window) updateNotifUI();
+// État initial
+if ('Notification' in window) {
+    if (localStorage.getItem('notifs-enabled') === null && Notification.permission === 'granted') {
+        localStorage.setItem('notifs-enabled', 'true');
+    }
+    updateNotifUI();
+}
 
 // ── NAV ──────────────────────────────────────────────
 const navBtns = document.querySelectorAll('.nav-btn');
