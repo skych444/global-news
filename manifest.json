@@ -1,0 +1,17 @@
+{
+  "name": "Global News Live",
+  "short_name": "GlobalNews",
+  "description": "Real-time world news at your fingertips.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

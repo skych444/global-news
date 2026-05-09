@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Global News</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GlobalNews">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Header -->
+        <header class="glass-header">
+            <div class="header-left">
+                <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
+                <nav class="top-nav">
+                    <button class="nav-item active" data-category="world">Monde</button>
+                    <span class="separator">|</span>
+                    <button class="nav-item" data-category="france">France</button>
+                    <span class="separator">|</span>
+                    <button class="nav-item" data-category="business">Éco</button>
+                    <span class="separator">|</span>
+                    <button class="nav-item" data-category="bourse">Bourse</button>
+                    <span class="separator">|</span>
+                    <button class="nav-item" data-category="people">People</button>
+                    <span class="separator">|</span>
+                    <button class="nav-item" data-category="media">Médias</button>
+                </nav>
+            </div>
+            <div class="header-right">
+                <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
+                    <i class="ri-sun-line"></i>
+                </button>
+                <button id="install-btn" class="icon-btn hidden" aria-label="Installer l'app">
+                    <i class="ri-install-line"></i>
+                </button>
+                <button id="push-btn" class="icon-btn" aria-label="Notifications">
+                    <i class="ri-notification-3-line"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="news-feed" class="news-feed">
+            <!-- Loader -->
+            <div id="loader" class="loader-container">
+                <div class="spinner"></div>
+                <p>Récupération des informations...</p>
+            </div>
+
+            <div id="articles-container" class="articles-grid">
+                <!-- Articles will be injected here via JS -->
+            </div>
+        </main>
+
+        <!-- In-App Browser Modal -->
+        <div id="article-modal" class="modal hidden">
+            <div class="modal-header glass-header" style="position: absolute;">
+                <button id="close-modal-btn" class="icon-btn">
+                    <i class="ri-arrow-left-line"></i>
+                </button>
+                <div class="modal-title" style="flex:1; text-align:center; font-weight:600;">Article</div>
+                <button id="open-external-btn" class="icon-btn">
+                    <i class="ri-external-link-line"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <iframe id="article-iframe" src="" frameborder="0"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.error('Service Worker registration failed', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
