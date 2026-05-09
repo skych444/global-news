@@ -503,14 +503,14 @@
 </div>
 
 <div style="text-align:center; padding: 20px; font-size: 8px; color: var(--border); letter-spacing: 2px;">
-    VERSION 60
+    VERSION 62
 </div>
 
 
 
 <script>
 // Force update if version mismatch
-const CURRENT_VERSION = '60';
+const CURRENT_VERSION = '62';
 if (localStorage.getItem('app-version') !== CURRENT_VERSION) {
     if ('serviceWorker' in navigator) {
         caches.keys().then(names => {
