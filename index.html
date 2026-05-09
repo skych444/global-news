@@ -352,14 +352,15 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 4px 12px;
-            gap: 10px;
-            font-size: 10px;
+            padding: 2px 12px;
+            gap: 8px;
+            font-size: 9px;
             color: var(--grey);
-            background: #000;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+        .status-sep { color: var(--border); margin: 0 2px; }
         .status-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
     </style>
@@ -379,8 +380,11 @@
     <!-- Status Bar (between logo and nav) -->
     <div class="status-bar">
         <span><span class="dot"></span>LIVE FEED</span>
+        <span class="status-sep">|</span>
         <span id="status-date"></span>
+        <span class="status-sep">|</span>
         <span id="status-clock"></span>
+        <span class="status-sep">|</span>
         <span id="status-txt"></span>
     </div>
     <nav class="nav-bar" id="nav-bar">
