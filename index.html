@@ -674,7 +674,7 @@ function renderList(articles) {
         li.innerHTML = `
             <span class="item-num">${String(i+1).padStart(2,'0')}</span>
             <div class="item-body">
-                <a class="item-title" href="${art.url}" target="_blank" rel="noopener">${art.title}</a>
+                <a class="item-title" href="https://txtify.it/${art.url}" target="_blank" rel="noopener">${art.title}</a>
                 <div class="item-meta">
                     <span class="item-source">${art.source}</span>
                     <span class="item-time">${formatTime(art.date)}</span>
