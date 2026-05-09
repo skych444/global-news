@@ -192,10 +192,10 @@
 
         /* Spécifique Mobile / iPhone */
         @media (max-width: 480px) {
-            .header-top { height: 48px; }
+            .header-top { height: 46px; }
             .status-bar { margin-bottom: 15px; }
             .nav-bar { padding-bottom: 4px; }
-            .icon-btn { width: 40px; height: 40px; font-size: 20px; }
+            .icon-btn { width: 36px; height: 36px; font-size: 18px; }
         }
 
         /* ── FEED PANEL ──────────────────────────────── */
@@ -527,23 +527,18 @@ notifBtn.addEventListener('click', (e) => {
     const isEnabled = localStorage.getItem('notifs-enabled') === 'true';
     const newState = !isEnabled;
     
-    // ON CHANGE L'ICÔNE TOUT DE SUITE
+    // Bascule immédiate de l'icône
     localStorage.setItem('notifs-enabled', newState);
     updateNotifUI();
 
     if (newState) {
-        if (!('Notification' in window)) {
-            console.log('Notifications non supportées');
-            return;
-        }
+        if (!('Notification' in window)) return;
+        
         Notification.requestPermission().then(perm => {
             if (perm !== 'granted') {
-                // Si refusé, on éteint l'icône
                 localStorage.setItem('notifs-enabled', 'false');
                 updateNotifUI();
-                alert('Veuillez autoriser les notifications dans les réglages iPhone.');
-            } else {
-                new Notification('Global News', { body: 'Notifications activées !' });
+                alert('Veuillez autoriser les notifications dans les réglages de votre iPhone pour cette fonction.');
             }
         });
     }
