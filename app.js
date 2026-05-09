@@ -133,37 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- In-App Browser Logic ---
-    const articleModal = document.getElementById('article-modal');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-    const openExternalBtn = document.getElementById('open-external-btn');
-    const articleIframe = document.getElementById('article-iframe');
-    let currentArticleUrl = '';
-
-    function openArticleModal(url) {
-        currentArticleUrl = url;
-        articleIframe.src = url;
-        articleModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    }
-
-    function closeArticleModal() {
-        articleModal.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore background scrolling
-        // setTimeout to clear iframe src after animation
-        setTimeout(() => { articleIframe.src = ''; }, 300);
-    }
-
-    closeModalBtn.addEventListener('click', closeArticleModal);
-    
-    openExternalBtn.addEventListener('click', () => {
-        if (currentArticleUrl) {
-            window.open(currentArticleUrl, '_blank');
-        }
-    });
-
-    // --- News Fetching & Rendering ---
-
     // Formatting Date logic (e.g. "Aujourd'hui à 14:30" or "09 Mai, 14:30")
     function formatNewsDate(dateString) {
         const date = new Date(dateString);
@@ -211,14 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageUrl = article.image || article.urlToImage || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; // Fallback image
 
             const card = document.createElement('a');
-            card.href = 'javascript:void(0)'; // Prevent default navigation
+            card.href = article.url;
             card.className = 'news-card';
-            
-            // Add click listener for modal
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                openArticleModal(article.url);
-            });
 
             card.innerHTML = `
                 <div class="card-img-container">
