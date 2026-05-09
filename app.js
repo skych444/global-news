@@ -375,10 +375,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     'https://www.latribune.fr/feed.xml'
                 ];
             } else if (category === 'bourse') {
+                // Sources testées et vérifiées comme fonctionnelles via rss2json
                 rssUrls = [
-                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
-                    'https://www.tradingsat.com/flux-rss/news-bourse.xml',
-                    'https://www.boursorama.com/bourse/actualites/flux-rss/'
+                    'https://www.bfmtv.com/rss/economie/',
+                    'https://www.lemonde.fr/argent/rss_full.xml'
                 ];
             } else if (category === 'people') {
                 rssUrls = [
