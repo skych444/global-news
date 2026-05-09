@@ -6,9 +6,75 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-btn');
     const articlesContainer = document.getElementById('articles-container');
     const loader = document.getElementById('loader');
+    const newsFeed = document.getElementById('news-feed');
+    const ptrIndicator = document.getElementById('ptr-indicator');
 
     // --- State ---
     let currentCategory = 'world';
+    let isRefreshing = false;
+    let startY = 0;
+    let pullDist = 0;
+    const PULL_THRESHOLD = 80;
+
+    // --- Pull to Refresh Logic ---
+    newsFeed.addEventListener('touchstart', (e) => {
+        if (window.scrollY <= 5) {
+            startY = e.touches[0].pageY;
+        }
+    }, { passive: true });
+
+    newsFeed.addEventListener('touchmove', (e) => {
+        if (startY === 0 || isRefreshing) return;
+        
+        const currentY = e.touches[0].pageY;
+        pullDist = currentY - startY;
+
+        if (pullDist > 0 && window.scrollY <= 5) {
+            document.body.classList.add('ptr-active');
+            // Resistance effect
+            const rotate = Math.min(pullDist * 2, 360);
+            ptrIndicator.querySelector('.ptr-spinner').style.transform = `rotate(${rotate}deg)`;
+            
+            if (pullDist > PULL_THRESHOLD) {
+                ptrIndicator.style.transform = `translateY(0) scale(1.2)`;
+            } else {
+                ptrIndicator.style.transform = `translateY(0) scale(1)`;
+            }
+        }
+    }, { passive: true });
+
+    newsFeed.addEventListener('touchend', async () => {
+        if (pullDist > PULL_THRESHOLD && !isRefreshing) {
+            startRefresh();
+        } else {
+            resetPtr();
+        }
+    });
+
+    async function startRefresh() {
+        isRefreshing = true;
+        document.body.classList.add('ptr-refreshing');
+        
+        // Haptic feedback if available
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(10);
+        }
+
+        await fetchNews(currentCategory);
+        
+        setTimeout(() => {
+            resetPtr();
+        }, 500);
+    }
+
+    function resetPtr() {
+        isRefreshing = false;
+        startY = 0;
+        pullDist = 0;
+        document.body.classList.remove('ptr-active', 'ptr-refreshing');
+        ptrIndicator.style.transform = '';
+        ptrIndicator.querySelector('.ptr-spinner').style.transform = '';
+    }
 
     // --- Theme Logic ---
     const themeIcon = themeBtn.querySelector('i');

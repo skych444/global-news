@@ -31,19 +31,6 @@
         <header class="glass-header">
             <div class="header-left">
                 <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
-                <nav class="top-nav">
-                    <button class="nav-item active" data-category="world">Monde</button>
-                    <span class="separator">|</span>
-                    <button class="nav-item" data-category="france">France</button>
-                    <span class="separator">|</span>
-                    <button class="nav-item" data-category="business">Éco</button>
-                    <span class="separator">|</span>
-                    <button class="nav-item" data-category="bourse">Bourse</button>
-                    <span class="separator">|</span>
-                    <button class="nav-item" data-category="people">People</button>
-                    <span class="separator">|</span>
-                    <button class="nav-item" data-category="media">Médias</button>
-                </nav>
             </div>
             <div class="header-right">
                 <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
@@ -60,6 +47,11 @@
 
         <!-- Main Content -->
         <main id="news-feed" class="news-feed">
+            <!-- Pull to refresh indicator -->
+            <div id="ptr-indicator" class="ptr-indicator">
+                <div class="ptr-spinner"></div>
+            </div>
+
             <!-- Loader -->
             <div id="loader" class="loader-container">
                 <div class="spinner"></div>
@@ -73,6 +65,16 @@
 
 
 
+        <nav class="main-nav glass-header">
+            <div class="nav-inner">
+                <button class="nav-item active" data-category="world">Monde</button>
+                <button class="nav-item" data-category="france">France</button>
+                <button class="nav-item" data-category="business">Éco</button>
+                <button class="nav-item" data-category="bourse">Bourse</button>
+                <button class="nav-item" data-category="people">People</button>
+                <button class="nav-item" data-category="media">Médias</button>
+            </div>
+        </nav>
     </div>
 
     <script src="app.js"></script>
