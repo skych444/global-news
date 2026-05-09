@@ -524,21 +524,28 @@ function updateNotifUI() {
 
 notifBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    const isEnabled = localStorage.getItem('notifs-enabled') === 'true';
-    const newState = !isEnabled;
-    
-    // Bascule immédiate de l'icône
-    localStorage.setItem('notifs-enabled', newState);
-    updateNotifUI();
+    // On vérifie l'état visuel actuel
+    const isActive = notifBtn.classList.contains('active');
 
-    if (newState) {
-        if (!('Notification' in window)) return;
-        
+    if (isActive) {
+        // ÉTEINDRE (IMMÉDIAT)
+        localStorage.setItem('notifs-enabled', 'false');
+        notifBtn.classList.remove('active');
+        notifBtn.innerHTML = '<i class="ri-notification-3-line"></i>';
+    } else {
+        // ALLUMER
+        if (!('Notification' in window)) {
+            alert('Notifications non supportées sur ce navigateur.');
+            return;
+        }
         Notification.requestPermission().then(perm => {
-            if (perm !== 'granted') {
-                localStorage.setItem('notifs-enabled', 'false');
-                updateNotifUI();
-                alert('Veuillez autoriser les notifications dans les réglages de votre iPhone pour cette fonction.');
+            if (perm === 'granted') {
+                localStorage.setItem('notifs-enabled', 'true');
+                notifBtn.classList.add('active');
+                notifBtn.innerHTML = '<i class="ri-notification-3-fill"></i>';
+                new Notification('Global News', { body: 'Notifications activées !' });
+            } else {
+                alert('Veuillez autoriser les notifications dans les réglages de votre iPhone.');
             }
         });
     }
