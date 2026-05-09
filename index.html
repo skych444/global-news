@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=11">
 </head>
 
 <body>
@@ -29,23 +29,10 @@
 
         <!-- Header -->
         <header class="glass-header">
-            <div class="header-top">
-                <div class="header-left">
-                    <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
-                </div>
-                <div class="header-right">
-                    <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
-                        <i class="ri-sun-line"></i>
-                    </button>
-                    <button id="install-btn" class="icon-btn hidden" aria-label="Installer l'app">
-                        <i class="ri-install-line"></i>
-                    </button>
-                    <button id="push-btn" class="icon-btn" aria-label="Notifications">
-                        <i class="ri-notification-3-line"></i>
-                    </button>
-                </div>
+            <div class="header-left">
+                <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
             </div>
-            
+
             <nav class="main-nav">
                 <div class="nav-inner">
                     <button class="nav-item active" data-category="world">Monde</button>
@@ -56,6 +43,18 @@
                     <button class="nav-item" data-category="media">Médias</button>
                 </div>
             </nav>
+
+            <div class="header-right">
+                <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
+                    <i class="ri-sun-line"></i>
+                </button>
+                <button id="install-btn" class="icon-btn hidden" aria-label="Installer l'app">
+                    <i class="ri-install-line"></i>
+                </button>
+                <button id="push-btn" class="icon-btn" aria-label="Notifications">
+                    <i class="ri-notification-3-line"></i>
+                </button>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -81,7 +80,7 @@
 
     </div>
 
-    <script src="app.js?v=10"></script>
+    <script src="app.js?v=11"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
