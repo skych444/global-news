@@ -335,22 +335,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (category === 'world') {
                 rssUrls = [
                     'https://www.lemonde.fr/international/rss_full.xml',
-                    'https://www.france24.com/fr/monde/rss'
+                    'https://www.france24.com/fr/monde/rss',
+                    'https://www.lefigaro.fr/rss/figaro_international.xml'
                 ];
             } else if (category === 'france') {
                 rssUrls = [
                     'https://www.lemonde.fr/france/rss_full.xml',
+                    'https://www.lefigaro.fr/rss/figaro_actualites.xml',
                     'https://www.france24.com/fr/france/rss'
                 ];
             } else if (category === 'business') {
                 rssUrls = [
                     'https://www.lemonde.fr/economie/rss_full.xml',
-                    'https://www.bfmtv.com/economie/rss.xml'
+                    'https://www.bfmtv.com/economie/rss.xml',
+                    'https://www.latribune.fr/feed.xml'
                 ];
             } else if (category === 'bourse') {
-                // Utilisation de l'API GNews spécifiquement pour la bourse car les flux RSS bloquent
+                // Utilisation de l'API GNews avec filtre strict de langue française
                 const API_KEY = 'fdf47891e248bc341637c9779b479bfd';
-                const url = `https://gnews.io/api/v4/search?q=bourse OR cac40 OR marchés OR actions&lang=fr&country=fr&max=15&apikey=${API_KEY}`;
+                const url = `https://gnews.io/api/v4/search?q=bourse OR cac40 OR marchés&lang=fr&country=fr&max=15&apikey=${API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 if (data.articles) {
@@ -363,17 +366,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         source: { name: item.source.name }
                     }));
                     renderArticles(mappedArticles);
-                    return; // Fin de l'exécution pour la bourse
+                    return;
                 }
             } else if (category === 'people') {
                 rssUrls = [
                     'https://www.20minutes.fr/feeds/rss-people.xml',
-                    'https://www.20minutes.fr/feeds/rss-culture.xml'
+                    'https://www.voici.fr/rss'
                 ];
             } else if (category === 'media') {
                 rssUrls = [
                     'https://www.lefigaro.fr/rss/figaro_medias.xml',
-                    'https://news.google.com/rss/search?q=medias+television+audiovisuel&hl=fr&gl=FR&ceid=FR:fr'
+                    'https://www.ozap.com/news.rss' // PureMédias
                 ];
             }
 
