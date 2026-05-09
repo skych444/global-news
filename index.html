@@ -101,7 +101,7 @@
         .nav-bar {
             display: flex;
             gap: 2px;
-            padding: 0 12px 8px;
+            padding: 4px 12px 8px;
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -354,23 +354,43 @@
         }
         .side-headlines li:hover { color: #fff; background: rgba(245,166,35,0.05); }
 
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            height: var(--header-h);
+            gap: 20px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
         /* ── HEADER STATUS BAR ────────────────────────── */
         .status-bar {
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 0 12px 2px;
+            padding: 0;
             gap: 8px;
             font-size: 9px;
             color: var(--grey);
             background: transparent;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
         }
         .status-sep { color: var(--border); margin: 0 2px; }
         .status-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+            .header-left { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .status-bar { margin-bottom: 8px; }
+        }
     </style>
 </head>
 <body>
@@ -378,22 +398,24 @@
 <!-- ── HEADER ──────────────────────────────────────── -->
 <header class="header">
     <div class="header-top">
-        <div class="logo">Global<span class="logo-news">News</span></div>
+        <div class="header-left">
+            <div class="logo">Global<span class="logo-news">News</span></div>
+            <!-- Status Bar (next to logo on desktop) -->
+            <div class="status-bar">
+                <span><span class="dot"></span>LIVE</span>
+                <span class="status-sep">|</span>
+                <span id="status-date"></span>
+                <span class="status-sep">|</span>
+                <span id="status-clock"></span>
+                <span class="status-sep">|</span>
+                <span id="status-txt"></span>
+            </div>
+        </div>
         <div class="icon-btns">
             <button class="icon-btn" id="theme-btn" title="Mode clair/sombre"><i class="ri-sun-line"></i></button>
             <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
             <button class="icon-btn" id="notif-btn" title="Notifications"><i class="ri-notification-line"></i></button>
         </div>
-    </div>
-    <!-- Status Bar (between logo and nav) -->
-    <div class="status-bar">
-        <span><span class="dot"></span>LIVE</span>
-        <span class="status-sep">|</span>
-        <span id="status-date"></span>
-        <span class="status-sep">|</span>
-        <span id="status-clock"></span>
-        <span class="status-sep">|</span>
-        <span id="status-txt"></span>
     </div>
     <nav class="nav-bar" id="nav-bar">
         <button class="nav-btn active" data-cat="world">Monde</button>
