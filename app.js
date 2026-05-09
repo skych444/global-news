@@ -376,8 +376,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'bourse') {
                 rssUrls = [
-                    'https://fr.finance.yahoo.com/news/rssindex.xml',
-                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
+                    'https://www.bfmtv.com/economie/bourse/rss.xml',
+                    'https://www.lesechos.fr/rss/rss_bourse.xml',
                     'https://www.tradingsat.com/flux-rss/news-bourse.xml'
                 ];
             } else if (category === 'people') {
@@ -410,9 +410,11 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
             // FILTRE STRICT FRANÇAIS : On vérifie la présence de caractères ou mots français
-            const frenchIndicators = ['le ', 'la ', 'les ', 'est ', 'un ', 'une ', 'du ', 'des ', 'au ', 'aux ', 'par ', 'pour ', 'é', 'à', 'è'];
+            const frenchIndicators = ['le', 'la', 'les', 'est', 'un', 'une', 'du', 'des', 'au', 'aux', 'par', 'pour', 'é', 'à', 'è'];
             articles = articles.filter(article => {
                 const text = (article.title + ' ' + (article.description || '')).toLowerCase();
+                // On accepte aussi les articles très courts de bourse qui contiennent souvent des chiffres et des %
+                if (category === 'bourse' && (text.includes('%') || text.includes('pts') || text.includes('cac'))) return true;
                 return frenchIndicators.some(ind => text.includes(ind));
             });
             
