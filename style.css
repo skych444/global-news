@@ -7,7 +7,7 @@
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-highlight: rgba(255, 255, 255, 0.02);
     --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --header-height: 64px;
+    --header-height: 108px;
 }
 
 body.light-mode {
@@ -167,7 +167,7 @@ body.light-mode .icon-btn:active {
 
 /* News Feed Content */
 .news-feed {
-    padding: calc(var(--header-height) + 10px) 16px 80px;
+    padding: var(--header-height) 16px 40px;
     flex: 1;
     width: 100%;
     max-width: 1200px;
