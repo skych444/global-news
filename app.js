@@ -351,23 +351,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     'https://www.latribune.fr/feed.xml'
                 ];
             } else if (category === 'bourse') {
-                // Utilisation de l'API GNews avec filtre strict de langue française
-                const API_KEY = 'fdf47891e248bc341637c9779b479bfd';
-                const url = `https://gnews.io/api/v4/search?q=bourse OR cac40 OR marchés&lang=fr&country=fr&max=15&apikey=${API_KEY}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.articles) {
-                    let mappedArticles = data.articles.map(item => ({
-                        title: item.title,
-                        description: item.description,
-                        publishedAt: item.publishedAt,
-                        url: item.url,
-                        image: item.image || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                        source: { name: item.source.name }
-                    }));
-                    renderArticles(mappedArticles);
-                    return;
+                try {
+                    const API_KEY = 'fdf47891e248bc341637c9779b479bfd';
+                    const url = `https://gnews.io/api/v4/search?q=bourse OR cac40 OR marchés&lang=fr&country=fr&max=15&apikey=${API_KEY}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data.articles && data.articles.length > 0) {
+                        let mappedArticles = data.articles.map(item => ({
+                            title: item.title,
+                            description: item.description,
+                            publishedAt: item.publishedAt,
+                            url: item.url,
+                            image: item.image || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                            source: { name: item.source.name }
+                        }));
+                        renderArticles(mappedArticles);
+                        loader.classList.add('hidden');
+                        return;
+                    }
+                } catch (e) {
+                    console.error("API GNews failed, falling back to RSS", e);
                 }
+                
+                // Fallback RSS pour la Bourse
+                rssUrls = [
+                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
+                    'https://www.boursier.com/rss/news.rss'
+                ];
             } else if (category === 'people') {
                 rssUrls = [
                     'https://www.20minutes.fr/feeds/rss-people.xml',
