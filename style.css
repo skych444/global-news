@@ -10,6 +10,12 @@
     --header-height: 108px;
 }
 
+@media (min-width: 1024px) {
+    :root {
+        --header-height: 64px;
+    }
+}
+
 body.light-mode {
     --bg-color: #f0f2f5;
     --text-primary: #1a1a1a;
@@ -369,29 +375,33 @@ body.light-mode .icon-btn:active {
 @media (min-width: 1024px) {
     .glass-header {
         padding: 0 calc(50vw - 480px); /* Limite la largeur du header */
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 20px;
+        height: var(--header-height);
+        flex-direction: row; /* fallback */
     }
     
+    .header-top {
+        display: contents; /* Permet aux enfants (Logo et Boutons) de se placer dans la grille du parent */
+    }
+
     .main-nav {
-        top: 0;
-        bottom: auto;
         border-top: none;
-        border-bottom: 1px solid var(--glass-border);
-        padding: 0 calc(50vw - 480px);
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        pointer-events: none;
+        height: 100%;
     }
 
     .nav-inner {
-        margin-left: 200px; /* Offset to not overlap brand title */
-        pointer-events: auto;
+        mask-image: none;
+        -webkit-mask-image: none;
+        gap: 24px;
+        justify-content: center;
     }
     
     .news-feed {
         padding-left: 0;
         padding-right: 0;
-        padding-bottom: 40px;
+        padding-top: calc(var(--header-height) + 20px);
     }
     
     .articles-grid {
