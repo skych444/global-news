@@ -195,16 +195,16 @@
             .header-top { 
                 display: grid;
                 grid-template-areas: 
-                    "logo logo"
-                    "status icons";
+                    "logo icons"
+                    "status status";
                 height: auto;
-                padding: 12px 12px 8px;
-                gap: 12px 0;
+                padding: 12px 12px 6px;
+                gap: 8px 0;
             }
             .header-left { display: contents; }
-            .logo { grid-area: logo; }
-            .status-bar { grid-area: status; align-self: center; margin-bottom: 0; }
+            .logo { grid-area: logo; align-self: center; }
             .icon-btns { grid-area: icons; justify-self: end; align-self: center; gap: 8px; }
+            .status-bar { grid-area: status; padding-top: 4px; margin-bottom: 6px; }
             .icon-btn { width: 34px; height: 34px; font-size: 16px; }
             .nav-bar { padding-bottom: 4px; }
         }
