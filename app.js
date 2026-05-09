@@ -362,43 +362,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'france') {
                 rssUrls = [
+                    'https://www.leparisien.fr/arc/outboundfeeds/rss/all/',
                     'https://www.lemonde.fr/france/rss_full.xml',
                     'https://www.lefigaro.fr/rss/figaro_actualites.xml',
                     'https://www.france24.com/fr/france/rss'
                 ];
             } else if (category === 'business') {
                 rssUrls = [
-                    'https://www.lemonde.fr/economie/rss_full.xml',
+                    'https://www.lesechos.fr/rss/rss_economie.xml',
+                    'https://www.lefigaro.fr/rss/figaro_economie.xml',
                     'https://www.bfmtv.com/economie/rss.xml',
                     'https://www.latribune.fr/feed.xml'
                 ];
             } else if (category === 'bourse') {
-                try {
-                    const API_KEY = 'fdf47891e248bc341637c9779b479bfd';
-                    const url = `https://gnews.io/api/v4/search?q=bourse OR cac40 OR marchés&lang=fr&country=fr&max=15&apikey=${API_KEY}`;
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    if (data.articles && data.articles.length > 0) {
-                        let mappedArticles = data.articles.map(item => ({
-                            title: item.title,
-                            description: item.description,
-                            publishedAt: item.publishedAt,
-                            url: item.url,
-                            image: item.image || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                            source: { name: item.source.name }
-                        }));
-                        renderArticles(mappedArticles);
-                        loader.classList.add('hidden');
-                        return;
-                    }
-                } catch (e) {
-                    console.error("API GNews failed, falling back to RSS", e);
-                }
-                
-                // Fallback RSS pour la Bourse (Google News RSS plus fiable avec l'agrégateur)
                 rssUrls = [
-                    'https://news.google.com/rss/search?q=bourse+cac40+marchés&hl=fr&gl=FR&ceid=FR:fr',
-                    'https://www.lefigaro.fr/rss/figaro_economie.xml'
+                    'https://www.tradingsat.com/flux-rss/news-bourse.xml',
+                    'https://www.lerevenu.com/rss.xml',
+                    'https://www.boursier.com/rss/news.rss'
                 ];
             } else if (category === 'people') {
                 rssUrls = [
@@ -428,6 +408,13 @@ document.addEventListener('DOMContentLoaded', () => {
             articles = articles.filter((article, index, self) =>
                 index === self.findIndex((t) => (t.title === article.title))
             );
+
+            // FILTRE STRICT FRANÇAIS : On vérifie la présence de mots français courants
+            const frenchStopWords = [' le ', ' la ', ' les ', ' est ', ' un ', ' une ', ' des ', ' du ', ' pour ', ' dans '];
+            articles = articles.filter(article => {
+                const text = (article.title + ' ' + (article.description || '')).toLowerCase();
+                return frenchStopWords.some(word => text.includes(word));
+            });
             
             // Trier par date la plus récente
             articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
