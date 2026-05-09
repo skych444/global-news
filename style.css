@@ -376,26 +376,36 @@ body.light-mode .icon-btn:active {
     .glass-header {
         padding: 0 calc(50vw - 480px); /* Limite la largeur du header */
         display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 20px;
+        grid-template-columns: auto auto 1fr; /* Logo, Icons, then Nav */
+        gap: 30px;
         height: var(--header-height);
-        flex-direction: row; /* fallback */
     }
     
     .header-top {
-        display: contents; /* Permet aux enfants (Logo et Boutons) de se placer dans la grille du parent */
+        display: contents; 
+    }
+
+    .header-left {
+        grid-column: 1;
+    }
+
+    .header-right {
+        grid-column: 2;
     }
 
     .main-nav {
+        grid-column: 3;
         border-top: none;
         height: 100%;
+        display: flex;
+        justify-content: flex-end;
     }
 
     .nav-inner {
         mask-image: none;
         -webkit-mask-image: none;
         gap: 24px;
-        justify-content: center;
+        justify-content: flex-end;
     }
     
     .news-feed {
