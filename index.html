@@ -29,20 +29,33 @@
 
         <!-- Header -->
         <header class="glass-header">
-            <div class="header-left">
-                <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
+            <div class="header-top">
+                <div class="header-left">
+                    <h1 class="brand-title">GLOBAL<span>NEWS</span></h1>
+                </div>
+                <div class="header-right">
+                    <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
+                        <i class="ri-sun-line"></i>
+                    </button>
+                    <button id="install-btn" class="icon-btn hidden" aria-label="Installer l'app">
+                        <i class="ri-install-line"></i>
+                    </button>
+                    <button id="push-btn" class="icon-btn" aria-label="Notifications">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                </div>
             </div>
-            <div class="header-right">
-                <button id="theme-btn" class="icon-btn" aria-label="Changer le thème">
-                    <i class="ri-sun-line"></i>
-                </button>
-                <button id="install-btn" class="icon-btn hidden" aria-label="Installer l'app">
-                    <i class="ri-install-line"></i>
-                </button>
-                <button id="push-btn" class="icon-btn" aria-label="Notifications">
-                    <i class="ri-notification-3-line"></i>
-                </button>
-            </div>
+            
+            <nav class="main-nav">
+                <div class="nav-inner">
+                    <button class="nav-item active" data-category="world">Monde</button>
+                    <button class="nav-item" data-category="france">France</button>
+                    <button class="nav-item" data-category="business">Éco</button>
+                    <button class="nav-item" data-category="bourse">Bourse</button>
+                    <button class="nav-item" data-category="people">People</button>
+                    <button class="nav-item" data-category="media">Médias</button>
+                </div>
+            </nav>
         </header>
 
         <!-- Main Content -->
@@ -65,17 +78,7 @@
 
 
 
-        <!-- Navigation (Bottom on Mobile, Desktop stays top via CSS) -->
-        <nav class="main-nav">
-            <div class="nav-inner">
-                <button class="nav-item active" data-category="world">Monde</button>
-                <button class="nav-item" data-category="france">France</button>
-                <button class="nav-item" data-category="business">Éco</button>
-                <button class="nav-item" data-category="bourse">Bourse</button>
-                <button class="nav-item" data-category="people">People</button>
-                <button class="nav-item" data-category="media">Médias</button>
-            </div>
-        </nav>
+
     </div>
 
     <script src="app.js"></script>
