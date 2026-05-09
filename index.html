@@ -378,8 +378,9 @@
     <!-- Status Bar (between logo and nav) -->
     <div class="status-bar">
         <span><span class="dot"></span>LIVE FEED</span>
-        <span id="status-txt">Connexion aux sources…</span>
-        <span style="margin-left:auto" id="status-time"></span>
+        <span id="status-date"></span>
+        <span id="status-clock"></span>
+        <span id="status-txt" style="margin-left:auto"></span>
     </div>
     <nav class="nav-bar" id="nav-bar">
         <button class="nav-btn active" data-cat="world">Monde</button>
@@ -440,12 +441,14 @@
 
 
 <script>
-// ── DATE STATUS BAR ──────────────────────────────────
-function updateDate() {
-    document.getElementById('status-time').textContent = new Date().toLocaleDateString('fr-FR', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+// ── DATE & CLOCK ─────────────────────────────────────
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById('status-date').textContent = now.toLocaleDateString('fr-FR', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+    document.getElementById('status-clock').textContent = now.toLocaleTimeString('fr-FR');
 }
-setInterval(updateDate, 60000);
-updateDate();
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
 // ── THEME TOGGLE ─────────────────────────────────────
 const themeBtn = document.getElementById('theme-btn');
@@ -611,7 +614,7 @@ async function fetchNews(cat) {
         articles.sort((a,b) => new Date(b.date) - new Date(a.date));
 
         bar.style.display = 'none';
-        status.textContent = `${articles.length} articles chargés — ${new Date().toLocaleTimeString('fr-FR')}`;
+        status.textContent = `${articles.length} articles chargés`;
         renderList(articles);
     } catch(e) {
         bar.style.display = 'none';
