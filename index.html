@@ -441,10 +441,6 @@
 
     <!-- Feed -->
     <section class="feed-panel">
-        <div class="section-header">
-            <span class="section-title" id="section-title">Monde</span>
-            <span class="section-count" id="section-count"></span>
-        </div>
         <div id="loader-bar" class="loader-bar"><div class="loader-bar-inner"></div></div>
         <ul class="news-list" id="news-list"></ul>
     </section>
@@ -530,7 +526,6 @@ navBtns.forEach(btn => {
         navBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentCat = btn.dataset.cat;
-        document.getElementById('section-title').textContent = btn.textContent;
         fetchNews(currentCat);
     });
 });
@@ -586,14 +581,11 @@ async function fetchFeed(url) {
 
 function renderList(articles) {
     const list = document.getElementById('news-list');
-    const count = document.getElementById('section-count');
     list.innerHTML = '';
     if (!articles.length) {
         list.innerHTML = `<li class="state-msg">Aucun article disponible</li>`;
-        count.textContent = '';
         return;
     }
-    count.textContent = `${articles.length} articles`;
     articles.forEach((art, i) => {
         const li = document.createElement('li');
         li.className = 'news-item';
