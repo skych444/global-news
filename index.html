@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <script>
         // MÉTHODE NUCLÉAIRE ANTI-CACHE
-        if (!window.location.search.includes('v=58')) {
-            window.location.search = '?v=58';
+        if (!window.location.search.includes('v=59')) {
+            window.location.search = '?v=59';
         }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -206,19 +206,18 @@
                 flex-wrap: wrap;
                 justify-content: space-between;
                 height: auto;
-                padding: 12px 12px 8px;
+                padding: 35px 12px 8px; /* 35px pour laisser place au tag rouge */
             }
-            .header-left { display: flex; width: 100%; justify-content: space-between; align-items: center; order: 1; }
             .logo { order: 1; }
             .icon-btns { order: 2; display: flex; gap: 8px; }
-            .status-bar { order: 3; width: 100%; padding-top: 10px; margin-bottom: 4px; }
-            
-            /* On réorganise le HTML via CSS order */
-            .header-top { flex-direction: row; }
-            .header-left { display: contents; }
-            
-            .icon-btn { width: 34px; height: 34px; font-size: 16px; }
-            .nav-bar { padding-bottom: 4px; }
+            .status-bar { order: 3; width: 100%; padding-top: 10px; border-top: 1px solid var(--border); margin-top: 8px; }
+            .icon-btn { width: 36px; height: 36px; font-size: 18px; }
+        }
+
+        /* Desktop specific */
+        @media (min-width: 481px) {
+            .header-top { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 12px; }
+            .status-bar { margin-left: 20px; flex: 1; }
         }
 
         /* ── FEED PANEL ──────────────────────────────── */
@@ -428,11 +427,14 @@
 </head>
 <body>
 
+<div id="version-tag" style="background:red; color:white; font-size:10px; text-align:center; padding:2px; font-weight:bold; position:fixed; top:0; left:0; width:100%; z-index:9999;">
+    FORCE UPDATE v59 - SI VOUS VOYEZ CECI, LE CODE EST À JOUR
+</div>
+
 <!-- ── HEADER ──────────────────────────────────────── -->
 <header class="header">
     <div class="header-top">
-        <div class="header-left">
-            <div class="logo">Global<span class="logo-news">News</span></div>
+        <div class="logo">Global<span class="logo-news">News</span></div>
             <!-- Status Bar (next to logo on desktop) -->
             <div class="status-bar">
                 <span><span class="dot"></span>LIVE</span>
@@ -443,7 +445,6 @@
                 <span class="status-sep">|</span>
                 <span id="status-txt"></span>
             </div>
-        </div>
         <div class="icon-btns">
             <button class="icon-btn" id="theme-btn" title="Mode clair/sombre"><i class="ri-sun-line"></i></button>
             <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
@@ -503,7 +504,7 @@
 
 <script>
 // Force update if version mismatch
-const CURRENT_VERSION = '58';
+const CURRENT_VERSION = '59';
 if (localStorage.getItem('app-version') !== CURRENT_VERSION) {
     if ('serviceWorker' in navigator) {
         caches.keys().then(names => {
