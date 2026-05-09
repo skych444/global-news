@@ -10,7 +10,7 @@
     --header-height: 108px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     :root {
         --header-height: 64px;
     }
@@ -366,38 +366,25 @@ body.light-mode .icon-btn:active {
 }
 
 /* Tablet & Desktop overrides */
-@media (min-width: 600px) {
-    .articles-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    }
-}
-
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     .glass-header {
-        padding: 0 calc(50vw - 480px); /* Limite la largeur du header */
-        display: grid;
-        grid-template-columns: auto auto 1fr; /* Logo, Icons, then Nav */
-        gap: 30px;
+        flex-direction: row;
+        align-items: center;
         height: var(--header-height);
+        gap: 30px;
+        padding: 0 40px;
     }
-    
+
     .header-top {
-        display: contents; 
-    }
-
-    .header-left {
-        grid-column: 1;
-    }
-
-    .header-right {
-        grid-column: 2;
+        display: flex;
+        align-items: center;
+        gap: 20px;
     }
 
     .main-nav {
-        grid-column: 3;
         border-top: none;
+        flex: 1;
         height: 100%;
-        display: flex;
         justify-content: flex-end;
     }
 
@@ -407,28 +394,20 @@ body.light-mode .icon-btn:active {
         gap: 24px;
         justify-content: flex-end;
     }
-    
+
     .news-feed {
-        padding-left: 0;
-        padding-right: 0;
         padding-top: calc(var(--header-height) + 20px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .glass-header {
+        padding: 0 calc(50vw - 480px);
     }
     
     .articles-grid {
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 24px;
-    }
-    
-    .modal-header {
-        padding: 0 calc(50vw - 480px) !important; /* Aligne avec le header */
-    }
-    
-    .modal-content {
-        max-width: 1000px;
-        margin: var(--header-height) auto 0;
-        border-radius: 20px 20px 0 0;
-        box-shadow: var(--card-shadow);
-        border: 1px solid var(--glass-border);
     }
 }
 
