@@ -184,6 +184,11 @@
             .sidebar { display: block; border-top: 1px solid var(--border); }
         }
 
+        /* Masquer le bandeau bourse sur ordinateur uniquement */
+        @media (min-width: 601px) {
+            .ticker-wrap { display: none; }
+        }
+
         /* Spécifique Mobile / iPhone */
         @media (max-width: 480px) {
             .header-top { height: 42px; }
