@@ -452,7 +452,7 @@
     <aside class="sidebar">
         <!-- Marchés -->
         <div class="side-block">
-            <div class="side-title">Marchés</div>
+            <div class="side-title">BOURSE</div>
             <table class="market-table" id="market-table">
                 <tr><td>CAC 40</td><td id="val-FCHI">--</td><td id="chg-FCHI">--</td></tr>
                 <tr><td>DAX</td><td id="val-GDAXI">--</td><td id="chg-GDAXI">--</td></tr>
@@ -463,13 +463,6 @@
                 <tr><td>BRENT</td><td id="val-BZF">--</td><td id="chg-BZF">--</td></tr>
                 <tr><td>BTC/USD</td><td id="val-BTC">--</td><td id="chg-BTC">--</td></tr>
             </table>
-        </div>
-        <!-- À la une -->
-        <div class="side-block">
-            <div class="side-title">À la une</div>
-            <ul class="side-headlines" id="side-headlines">
-                <li>Chargement…</li>
-            </ul>
         </div>
     </aside>
 
@@ -615,15 +608,7 @@ function renderList(articles) {
         list.appendChild(li);
     });
 
-    // Fill sidebar headlines with first 8 items
-    const side = document.getElementById('side-headlines');
-    side.innerHTML = '';
-    articles.slice(0,8).forEach(art => {
-        const li = document.createElement('li');
-        li.textContent = art.title;
-        li.onclick = () => window.open(art.url,'_blank');
-        side.appendChild(li);
-    });
+
 }
 
 async function fetchNews(cat) {
