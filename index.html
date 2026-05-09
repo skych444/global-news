@@ -493,9 +493,9 @@
                 <tr><td>NASDAQ</td><td id="val-IXIC">--</td><td id="chg-IXIC">--</td></tr>
                 <tr><td>DOW JONES</td><td id="val-DJI">--</td><td id="chg-DJI">--</td></tr>
                 <tr><td>EUR/USD</td><td id="val-EURUSD">--</td><td id="chg-EURUSD">--</td></tr>
-                <tr><td>OR</td><td id="val-GCF">--</td><td id="chg-GCF">--</td></tr>
-                <tr><td>BRENT</td><td id="val-BZF">--</td><td id="chg-BZF">--</td></tr>
-                <tr><td>BTC/USD</td><td id="val-BTC">--</td><td id="chg-BTC">--</td></tr>
+                <tr><td>OR</td><td id="val-GC">--</td><td id="chg-GC">--</td></tr>
+                <tr><td>BRENT</td><td id="val-BZ">--</td><td id="chg-BZ">--</td></tr>
+                <tr><td>BTC/USD</td><td id="val-BTC-USD">--</td><td id="chg-BTC-USD">--</td></tr>
             </table>
         </div>
     </aside>
@@ -740,7 +740,10 @@ async function fetchMarketData() {
     try {
         const response = await fetch(proxyUrl);
         const data = await response.json();
-        const quotes = JSON.parse(data.contents).quoteResponse.result;
+        if (!data.contents) return;
+        
+        const json = JSON.parse(data.contents);
+        const quotes = json.quoteResponse.result;
         
         const tickerTrack = document.getElementById('ticker-track');
         let tickerHTML = '';
@@ -748,7 +751,7 @@ async function fetchMarketData() {
         quotes.forEach(q => {
             const sym = q.symbol;
             const price = q.regularMarketPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 });
-            const change = q.regularMarketChangePercent.toFixed(2);
+            const change = q.regularMarketChangePercent ? q.regularMarketChangePercent.toFixed(2) : '0.00';
             const isUp = q.regularMarketChangePercent >= 0;
             const arrow = isUp ? '▲' : '▼';
             const cls = isUp ? 'up' : 'dn';
@@ -758,18 +761,19 @@ async function fetchMarketData() {
             const idBase = sym.replace('^', '').replace('=X', '').replace('=F', '');
             const valEl = document.getElementById(`val-${idBase}`);
             const chgEl = document.getElementById(`chg-${idBase}`);
+            
             if (valEl) valEl.textContent = price + (sym.includes('USD') || sym.includes('=F') ? ' $' : '');
             if (chgEl) {
                 chgEl.textContent = (isUp ? '+' : '') + change + '%';
                 chgEl.className = cls;
             }
             
-            // Build Ticker HTML
-            tickerHTML += `<span class="ticker-item">${name} <span class="${cls}">${arrow} ${price} (${isUp ? '+' : ''}${change}%)</span></span>`;
+            tickerHTML += `<span class="ticker-item">${name} <span class="${cls}">${arrow} ${price}</span></span>`;
         });
         
-        // Duplicate for infinite scroll
-        tickerTrack.innerHTML = tickerHTML + tickerHTML;
+        if (tickerTrack && tickerHTML) {
+            tickerTrack.innerHTML = tickerHTML + tickerHTML;
+        }
         
     } catch (e) {
         console.error('Market data error:', e);
