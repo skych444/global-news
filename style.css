@@ -181,7 +181,7 @@ body.light-mode .icon-btn:active {
 
 /* News Feed Content */
 .news-feed {
-    padding: var(--header-height) 16px 40px;
+    padding: calc(var(--header-height) + 20px) 16px 40px;
     flex: 1;
     width: 100%;
     max-width: 1200px;
