@@ -78,18 +78,19 @@
             background: none;
             border: 1px solid var(--border);
             color: var(--grey);
-            font-size: 16px;
-            width: 32px;
-            height: 32px;
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all .15s;
-            border-radius: 2px;
+            border-radius: 4px;
+            touch-action: manipulation;
         }
         .icon-btn:hover { border-color: var(--teal); color: var(--teal); }
-        .icon-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(0,201,177,0.1); }
+        .icon-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(0,201,177,0.15); }
 
         .header-clock {
             font-size: 11px;
@@ -191,9 +192,10 @@
 
         /* Spécifique Mobile / iPhone */
         @media (max-width: 480px) {
-            .header-top { height: 42px; }
+            .header-top { height: 48px; }
             .status-bar { margin-bottom: 15px; }
             .nav-bar { padding-bottom: 4px; }
+            .icon-btn { width: 40px; height: 40px; font-size: 20px; }
         }
 
         /* ── FEED PANEL ──────────────────────────────── */
@@ -520,28 +522,29 @@ function updateNotifUI() {
     }
 }
 
-notifBtn.addEventListener('click', () => {
+notifBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     const isEnabled = localStorage.getItem('notifs-enabled') === 'true';
+    const newState = !isEnabled;
+    
+    // ON CHANGE L'ICÔNE TOUT DE SUITE
+    localStorage.setItem('notifs-enabled', newState);
+    updateNotifUI();
 
-    if (isEnabled) {
-        // Désactivation immédiate
-        localStorage.setItem('notifs-enabled', 'false');
-        updateNotifUI();
-    } else {
-        // Tentative d'activation
+    if (newState) {
         if (!('Notification' in window)) {
-            alert('Notifications non supportées sur ce navigateur.');
+            console.log('Notifications non supportées');
             return;
         }
-
         Notification.requestPermission().then(perm => {
-            if (perm === 'granted') {
-                localStorage.setItem('notifs-enabled', 'true');
-                new Notification('Global News', { body: 'Notifications activées !' });
+            if (perm !== 'granted') {
+                // Si refusé, on éteint l'icône
+                localStorage.setItem('notifs-enabled', 'false');
+                updateNotifUI();
+                alert('Veuillez autoriser les notifications dans les réglages iPhone.');
             } else {
-                alert('Veuillez autoriser les notifications dans les réglages de votre appareil.');
+                new Notification('Global News', { body: 'Notifications activées !' });
             }
-            updateNotifUI();
         });
     }
 });
