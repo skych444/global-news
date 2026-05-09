@@ -388,10 +388,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error("API GNews failed, falling back to RSS", e);
                 }
                 
-                // Fallback RSS pour la Bourse
+                // Fallback RSS pour la Bourse (Google News RSS plus fiable avec l'agrégateur)
                 rssUrls = [
-                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
-                    'https://www.boursier.com/rss/news.rss'
+                    'https://news.google.com/rss/search?q=bourse+cac40+marchés&hl=fr&gl=FR&ceid=FR:fr',
+                    'https://www.lefigaro.fr/rss/figaro_economie.xml'
                 ];
             } else if (category === 'people') {
                 rssUrls = [
