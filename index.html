@@ -347,21 +347,17 @@
         }
         .side-headlines li:hover { color: #fff; background: rgba(245,166,35,0.05); }
 
-        /* ── FOOTER STATUS BAR ───────────────────────── */
+        /* ── HEADER STATUS BAR ────────────────────────── */
         .status-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0; right: 0;
-            height: 22px;
-            background: #000;
-            border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 12px;
-            gap: 20px;
+            padding: 4px 12px;
+            gap: 14px;
             font-size: 10px;
             color: var(--grey);
-            z-index: 100;
+            background: #000;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
         .status-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -378,6 +374,12 @@
             <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
             <button class="icon-btn" id="notif-btn" title="Notifications"><i class="ri-notification-line"></i></button>
         </div>
+    </div>
+    <!-- Status Bar (between logo and nav) -->
+    <div class="status-bar">
+        <span><span class="dot"></span>LIVE FEED</span>
+        <span id="status-txt">Connexion aux sources…</span>
+        <span style="margin-left:auto" id="status-time"></span>
     </div>
     <nav class="nav-bar" id="nav-bar">
         <button class="nav-btn active" data-cat="world">Monde</button>
@@ -435,12 +437,7 @@
 
 </div>
 
-<!-- ── STATUS BAR ──────────────────────────────────── -->
-<div class="status-bar">
-    <span><span class="dot"></span>LIVE FEED</span>
-    <span id="status-txt">Connexion aux sources…</span>
-    <span style="margin-left:auto" id="status-time"></span>
-</div>
+
 
 <script>
 // ── DATE STATUS BAR ──────────────────────────────────
