@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
     const newsFeed = document.getElementById('news-feed');
     const ptrIndicator = document.getElementById('ptr-indicator');
+    const refreshBtn = document.getElementById('refresh-btn');
 
     // --- State ---
     let currentCategory = 'world';
@@ -75,6 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ptrIndicator.style.transform = '';
         ptrIndicator.querySelector('.ptr-spinner').style.transform = '';
     }
+
+    // --- Refresh Button Logic ---
+    refreshBtn.addEventListener('click', () => {
+        const icon = refreshBtn.querySelector('i');
+        icon.style.transition = 'transform 0.6s ease';
+        icon.style.transform = 'rotate(360deg)';
+        
+        fetchNews(currentCategory);
+        
+        setTimeout(() => {
+            icon.style.transition = 'none';
+            icon.style.transform = 'rotate(0deg)';
+        }, 600);
+    });
 
     // --- Theme Logic ---
     const themeIcon = themeBtn.querySelector('i');
