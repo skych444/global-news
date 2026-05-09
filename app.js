@@ -376,9 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'bourse') {
                 rssUrls = [
-                    'https://www.tradingsat.com/flux-rss/news-bourse.xml',
-                    'https://www.lerevenu.com/rss.xml',
-                    'https://www.boursier.com/rss/news.rss'
+                    'https://fr.finance.yahoo.com/news/rssindex.xml',
+                    'https://investir.lesechos.fr/rss/flux_actu_bourse.php',
+                    'https://www.tradingsat.com/flux-rss/news-bourse.xml'
                 ];
             } else if (category === 'people') {
                 rssUrls = [
@@ -409,11 +409,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 index === self.findIndex((t) => (t.title === article.title))
             );
 
-            // FILTRE STRICT FRANÇAIS : On vérifie la présence de mots français courants
-            const frenchStopWords = [' le ', ' la ', ' les ', ' est ', ' un ', ' une ', ' des ', ' du ', ' pour ', ' dans '];
+            // FILTRE STRICT FRANÇAIS : On vérifie la présence de caractères ou mots français
+            const frenchIndicators = ['le ', 'la ', 'les ', 'est ', 'un ', 'une ', 'du ', 'des ', 'au ', 'aux ', 'par ', 'pour ', 'é', 'à', 'è'];
             articles = articles.filter(article => {
                 const text = (article.title + ' ' + (article.description || '')).toLowerCase();
-                return frenchStopWords.some(word => text.includes(word));
+                return frenchIndicators.some(ind => text.includes(ind));
             });
             
             // Trier par date la plus récente
