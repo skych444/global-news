@@ -518,7 +518,7 @@ function updateNotifUI() {
         notifBtn.innerHTML = '<i class="ri-notification-3-fill"></i>';
     } else {
         notifBtn.classList.remove('active');
-        notifBtn.innerHTML = '<i class="ri-notification-3-line"></i>';
+        notifBtn.innerHTML = '<i class="ri-notification-off-line"></i>';
     }
 }
 
@@ -531,7 +531,7 @@ notifBtn.addEventListener('click', (e) => {
         // ÉTEINDRE (IMMÉDIAT)
         localStorage.setItem('notifs-enabled', 'false');
         notifBtn.classList.remove('active');
-        notifBtn.innerHTML = '<i class="ri-notification-3-line"></i>';
+        notifBtn.innerHTML = '<i class="ri-notification-off-line"></i>';
     } else {
         // ALLUMER
         if (!('Notification' in window)) {
