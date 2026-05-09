@@ -299,18 +299,25 @@ document.addEventListener('DOMContentLoaded', () => {
             // Extraire l'image (enclosure, thumbnail, ou fallback)
             let fallbackImage = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
             if (rssUrl.includes('bourse') || rssUrl.includes('cac40')) {
-                fallbackImage = 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; // Stock market
+                fallbackImage = 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+            } else if (rssUrl.includes('economie') || rssUrl.includes('business') || rssUrl.includes('tribune')) {
+                fallbackImage = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; // Eco fallback
             }
             
             let imageUrl = fallbackImage; 
-            if (item.enclosure && item.enclosure.link && item.enclosure.link.length > 0) {
+            if (item.enclosure && item.enclosure.link) {
                 imageUrl = item.enclosure.link;
-            } else if (item.thumbnail && item.thumbnail.length > 0) {
+            } else if (item.thumbnail) {
                 imageUrl = item.thumbnail;
             } else {
-                // Try to find image in HTML description
-                const img = div.querySelector('img');
-                if (img && img.src) imageUrl = img.src;
+                // Try to find image in HTML description or content
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = item.description || item.content || '';
+                const img = tempDiv.querySelector('img');
+                // Avoid tiny tracking pixels (usually < 10px)
+                if (img && img.src && !img.src.includes('smartadserver') && !img.src.includes('xiti')) {
+                    imageUrl = img.src;
+                }
             }
             
             let sourceName = 'Actualités';
