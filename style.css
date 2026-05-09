@@ -102,7 +102,6 @@ body {
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-top: 1px solid var(--glass-border);
-    border-bottom: none;
     display: flex;
     align-items: center;
 }
