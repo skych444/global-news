@@ -192,10 +192,21 @@
 
         /* Spécifique Mobile / iPhone */
         @media (max-width: 480px) {
-            .header-top { height: 46px; }
-            .status-bar { margin-bottom: 15px; }
+            .header-top { 
+                display: grid;
+                grid-template-areas: 
+                    "logo logo"
+                    "status icons";
+                height: auto;
+                padding: 12px 12px 8px;
+                gap: 12px 0;
+            }
+            .header-left { display: contents; }
+            .logo { grid-area: logo; }
+            .status-bar { grid-area: status; align-self: center; margin-bottom: 0; }
+            .icon-btns { grid-area: icons; justify-self: end; align-self: center; gap: 8px; }
+            .icon-btn { width: 34px; height: 34px; font-size: 16px; }
             .nav-bar { padding-bottom: 4px; }
-            .icon-btn { width: 36px; height: 36px; font-size: 18px; }
         }
 
         /* ── FEED PANEL ──────────────────────────────── */
