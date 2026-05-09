@@ -140,8 +140,9 @@
             align-items: center;
         }
         .ticker-label {
-            background: var(--amber);
-            color: #000;
+            background: transparent;
+            border-right: 1px solid var(--teal);
+            color: var(--teal);
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
@@ -151,6 +152,7 @@
             align-items: center;
             flex-shrink: 0;
             z-index: 1;
+            text-transform: uppercase;
         }
         .ticker-track {
             display: flex;
@@ -426,7 +428,7 @@
     </nav>
     <!-- Ticker -->
     <div class="ticker-wrap">
-        <div class="ticker-label">LIVE</div>
+        <div class="ticker-label">BOURSE</div>
         <div class="ticker-track" id="ticker-track">
             <span class="ticker-item">Chargement des marchés...</span>
         </div>
