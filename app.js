@@ -369,9 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'business') {
                 rssUrls = [
-                    'https://www.lesechos.fr/rss/rss_economie.xml',
+                    'https://www.lemonde.fr/economie/rss_full.xml',
                     'https://www.lefigaro.fr/rss/figaro_economie.xml',
-                    'https://www.bfmtv.com/economie/rss.xml',
+                    'https://www.france24.com/fr/eco-tech/rss',
                     'https://www.latribune.fr/feed.xml'
                 ];
             } else if (category === 'bourse') {
