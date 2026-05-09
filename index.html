@@ -503,14 +503,14 @@
 </div>
 
 <div style="text-align:center; padding: 20px; font-size: 8px; color: var(--border); letter-spacing: 2px;">
-    VERSION 62
+    VERSION 63
 </div>
 
 
 
 <script>
 // Force update if version mismatch
-const CURRENT_VERSION = '62';
+const CURRENT_VERSION = '63';
 if (localStorage.getItem('app-version') !== CURRENT_VERSION) {
     if ('serviceWorker' in navigator) {
         caches.keys().then(names => {
@@ -674,7 +674,7 @@ function renderList(articles) {
         li.innerHTML = `
             <span class="item-num">${String(i+1).padStart(2,'0')}</span>
             <div class="item-body">
-                <a class="item-title" href="https://txtify.it/${art.url}" target="_blank" rel="noopener">${art.title}</a>
+                <a class="item-title" href="https://www.printfriendly.com/p/g/${encodeURIComponent(art.url)}" target="_blank" rel="noopener">${art.title}</a>
                 <div class="item-meta">
                     <span class="item-source">${art.source}</span>
                     <span class="item-time">${formatTime(art.date)}</span>
