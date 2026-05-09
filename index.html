@@ -503,20 +503,40 @@ refreshBtn.addEventListener('click', () => {
 
 // ── NOTIFICATIONS ─────────────────────────────────────
 const notifBtn = document.getElementById('notif-btn');
-notifBtn.addEventListener('click', () => {
-    if (!('Notification' in window)) { alert('Notifications non supportées sur ce navigateur.'); return; }
+
+function updateNotifUI() {
     if (Notification.permission === 'granted') {
-        notifBtn.classList.toggle('active');
+        notifBtn.classList.add('active');
+        notifBtn.innerHTML = '<i class="ri-notification-3-fill"></i>';
     } else {
+        notifBtn.classList.remove('active');
+        notifBtn.innerHTML = '<i class="ri-notification-3-line"></i>';
+    }
+}
+
+notifBtn.addEventListener('click', () => {
+    if (!('Notification' in window)) {
+        alert('Les notifications ne sont pas supportées sur ce navigateur (ou mode incognito).');
+        return;
+    }
+
+    if (Notification.permission === 'granted') {
+        new Notification('Global News', { body: 'Les notifications sont déjà actives !' });
+        updateNotifUI();
+    } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(perm => {
             if (perm === 'granted') {
-                notifBtn.classList.add('active');
-                notifBtn.innerHTML = '<i class="ri-notification-fill"></i>';
                 new Notification('Global News', { body: 'Notifications activées !' });
             }
+            updateNotifUI();
         });
+    } else {
+        alert('Les notifications sont bloquées. Veuillez les activer dans les réglages de votre navigateur.');
     }
 });
+
+// Initial state
+if ('Notification' in window) updateNotifUI();
 
 // ── NAV ──────────────────────────────────────────────
 const navBtns = document.querySelectorAll('.nav-btn');
