@@ -384,21 +384,7 @@
     <div class="ticker-wrap">
         <div class="ticker-label">LIVE</div>
         <div class="ticker-track" id="ticker-track">
-            <span class="ticker-item">CAC 40 <span class="up">▲ 7 842.14 (+0.43%)</span></span>
-            <span class="ticker-item">EUR/USD <span class="dn">▼ 1.0812 (-0.11%)</span></span>
-            <span class="ticker-item">DAX <span class="up">▲ 18 231.10 (+0.27%)</span></span>
-            <span class="ticker-item">NASDAQ <span class="up">▲ 19 104.50 (+0.68%)</span></span>
-            <span class="ticker-item">BTC/USD <span class="dn">▼ 62 340 (-1.2%)</span></span>
-            <span class="ticker-item">Pétrole (Brent) <span class="dn">▼ 82.41 (-0.33%)</span></span>
-            <span class="ticker-item">OR <span class="up">▲ 2 318 (+0.5%)</span></span>
-            <!-- dupliqué pour boucle infinie -->
-            <span class="ticker-item">CAC 40 <span class="up">▲ 7 842.14 (+0.43%)</span></span>
-            <span class="ticker-item">EUR/USD <span class="dn">▼ 1.0812 (-0.11%)</span></span>
-            <span class="ticker-item">DAX <span class="up">▲ 18 231.10 (+0.27%)</span></span>
-            <span class="ticker-item">NASDAQ <span class="up">▲ 19 104.50 (+0.68%)</span></span>
-            <span class="ticker-item">BTC/USD <span class="dn">▼ 62 340 (-1.2%)</span></span>
-            <span class="ticker-item">Pétrole (Brent) <span class="dn">▼ 82.41 (-0.33%)</span></span>
-            <span class="ticker-item">OR <span class="up">▲ 2 318 (+0.5%)</span></span>
+            <span class="ticker-item">Chargement des marchés...</span>
         </div>
     </div>
 </header>
@@ -421,15 +407,15 @@
         <!-- Marchés -->
         <div class="side-block">
             <div class="side-title">Marchés</div>
-            <table class="market-table">
-                <tr><td>CAC 40</td><td>7 842</td><td class="up">+0.43%</td></tr>
-                <tr><td>DAX</td><td>18 231</td><td class="up">+0.27%</td></tr>
-                <tr><td>NASDAQ</td><td>19 104</td><td class="up">+0.68%</td></tr>
-                <tr><td>DOW JONES</td><td>38 961</td><td class="dn">-0.12%</td></tr>
-                <tr><td>EUR/USD</td><td>1.0812</td><td class="dn">-0.11%</td></tr>
-                <tr><td>OR</td><td>2 318 $</td><td class="up">+0.50%</td></tr>
-                <tr><td>BRENT</td><td>82.41 $</td><td class="dn">-0.33%</td></tr>
-                <tr><td>BTC</td><td>62 340 $</td><td class="dn">-1.20%</td></tr>
+            <table class="market-table" id="market-table">
+                <tr><td>CAC 40</td><td id="val-FCHI">--</td><td id="chg-FCHI">--</td></tr>
+                <tr><td>DAX</td><td id="val-GDAXI">--</td><td id="chg-GDAXI">--</td></tr>
+                <tr><td>NASDAQ</td><td id="val-IXIC">--</td><td id="chg-IXIC">--</td></tr>
+                <tr><td>DOW JONES</td><td id="val-DJI">--</td><td id="chg-DJI">--</td></tr>
+                <tr><td>EUR/USD</td><td id="val-EURUSD">--</td><td id="chg-EURUSD">--</td></tr>
+                <tr><td>OR</td><td id="val-GCF">--</td><td id="chg-GCF">--</td></tr>
+                <tr><td>BRENT</td><td id="val-BZF">--</td><td id="chg-BZF">--</td></tr>
+                <tr><td>BTC/USD</td><td id="val-BTC">--</td><td id="chg-BTC">--</td></tr>
             </table>
         </div>
         <!-- À la une -->
@@ -631,8 +617,66 @@ async function fetchNews(cat) {
     }
 }
 
+// ── MARKET DATA ──────────────────────────────────────
+const TICKERS = {
+    '^FCHI': 'CAC 40',
+    '^GDAXI': 'DAX',
+    '^IXIC': 'NASDAQ',
+    '^DJI': 'DOW JONES',
+    'EURUSD=X': 'EUR/USD',
+    'BTC-USD': 'BTC/USD',
+    'GC=F': 'OR',
+    'BZ=F': 'BRENT'
+};
+
+async function fetchMarketData() {
+    const symbols = Object.keys(TICKERS).join(',');
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    
+    try {
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+        const quotes = JSON.parse(data.contents).quoteResponse.result;
+        
+        const tickerTrack = document.getElementById('ticker-track');
+        let tickerHTML = '';
+        
+        quotes.forEach(q => {
+            const sym = q.symbol;
+            const price = q.regularMarketPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 });
+            const change = q.regularMarketChangePercent.toFixed(2);
+            const isUp = q.regularMarketChangePercent >= 0;
+            const arrow = isUp ? '▲' : '▼';
+            const cls = isUp ? 'up' : 'dn';
+            const name = TICKERS[sym] || sym;
+            
+            // Update Sidebar Table
+            const idBase = sym.replace('^', '').replace('=X', '').replace('=F', '');
+            const valEl = document.getElementById(`val-${idBase}`);
+            const chgEl = document.getElementById(`chg-${idBase}`);
+            if (valEl) valEl.textContent = price + (sym.includes('USD') || sym.includes('=F') ? ' $' : '');
+            if (chgEl) {
+                chgEl.textContent = (isUp ? '+' : '') + change + '%';
+                chgEl.className = cls;
+            }
+            
+            // Build Ticker HTML
+            tickerHTML += `<span class="ticker-item">${name} <span class="${cls}">${arrow} ${price} (${isUp ? '+' : ''}${change}%)</span></span>`;
+        });
+        
+        // Duplicate for infinite scroll
+        tickerTrack.innerHTML = tickerHTML + tickerHTML;
+        
+    } catch (e) {
+        console.error('Market data error:', e);
+    }
+}
+
 // Initial load
 fetchNews('world');
+fetchMarketData();
+setInterval(fetchMarketData, 60000); // Refresh every minute
 </script>
 </body>
 </html>
