@@ -131,6 +131,17 @@ body {
     transition: color 0.3s ease;
     text-transform: capitalize;
     padding: 10px 4px;
+    position: relative;
+}
+
+.nav-item:not(:last-child)::after {
+    content: "";
+    display: inline-block;
+    width: 1px;
+    height: 10px;
+    background: var(--glass-border);
+    margin-left: 20px;
+    vertical-align: middle;
 }
 
 .nav-item:hover, .nav-item.active {
