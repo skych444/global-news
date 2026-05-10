@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let fallbackImage = 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
             if (rssUrl.includes('bourse') || rssUrl.includes('cac40')) {
                 fallbackImage = 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
-            } else if (rssUrl.includes('economie') || rssUrl.includes('business') || rssUrl.includes('tribune')) {
+            } else if (rssUrl.includes('economie') || rssUrl.includes('business') || rssUrl.includes('tribune') || rssUrl.includes('eco') || rssUrl.includes('latribune')) {
                 fallbackImage = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; // Eco fallback
             }
             
@@ -374,12 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'https://www.france24.com/fr/eco-tech/rss',
                     'https://www.latribune.fr/feed.xml'
                 ];
-            } else if (category === 'bourse') {
-                // Sources testées et vérifiées comme fonctionnelles via rss2json
-                rssUrls = [
-                    'https://www.bfmtv.com/rss/economie/',
-                    'https://www.lemonde.fr/argent/rss_full.xml'
-                ];
+
             } else if (category === 'people') {
                 rssUrls = [
                     'https://www.20minutes.fr/feeds/rss-people.xml',
@@ -405,19 +400,15 @@ document.addEventListener('DOMContentLoaded', () => {
             results.forEach(res => { articles = articles.concat(res); });
             
             // Retirer les éventuels doublons (basé sur le titre)
-            articles = articles.filter((article, index, self) =>
-                index === self.findIndex((t) => (t.title === article.title))
-            );
+            // Filtre de langue : on applique le filtre uniquement si ce n'est pas la catégorie Bourse
+            if (category !== 'bourse') {
+                const frenchIndicators = ['le', 'la', 'les', 'est', 'un', 'une', 'du', 'des', 'au', 'aux', 'par', 'pour', 'é', 'à', 'è'];
+                articles = articles.filter(article => {
+                    const text = (article.title + ' ' + (article.description || '')).toLowerCase();
+                    return frenchIndicators.some(ind => text.includes(ind));
+                });
+            }
 
-            // FILTRE STRICT FRANÇAIS : On vérifie la présence de caractères ou mots français
-            const frenchIndicators = ['le', 'la', 'les', 'est', 'un', 'une', 'du', 'des', 'au', 'aux', 'par', 'pour', 'é', 'à', 'è'];
-            articles = articles.filter(article => {
-                const text = (article.title + ' ' + (article.description || '')).toLowerCase();
-                // On accepte aussi les articles très courts de bourse qui contiennent souvent des chiffres et des %
-                if (category === 'bourse' && (text.includes('%') || text.includes('pts') || text.includes('cac'))) return true;
-                return frenchIndicators.some(ind => text.includes(ind));
-            });
-            
             // Trier par date la plus récente
             articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
             

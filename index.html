@@ -66,6 +66,7 @@
             border-bottom: 1px solid var(--border);
         }
 
+        /* Row 1: logo + icons */
         .header-top {
             display: flex;
             align-items: center;
@@ -91,6 +92,7 @@
             display: flex;
             gap: 4px;
             align-items: center;
+            margin-left: auto;   /* always push to far right */
         }
 
         .icon-btn {
@@ -120,10 +122,43 @@
             background: rgba(0, 201, 177, 0.15);
         }
 
-        .header-clock {
-            font-size: 11px;
+        /* Row 2: status bar — always full width, below logo+icons */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            padding: 5px 12px;
+            gap: 8px;
+            font-size: 9px;
             color: var(--grey);
+            background: rgba(0, 201, 177, 0.04);
+            border-top: 1px solid var(--border);
+            text-transform: uppercase;
             letter-spacing: 1px;
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .status-bar::-webkit-scrollbar { display: none; }
+
+        .status-sep {
+            color: var(--border);
+            margin: 0 2px;
+        }
+
+        .status-bar .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            display: inline-block;
+            margin-right: 4px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1 }
+            50%       { opacity: .3 }
         }
 
         /* ── NAV ─────────────────────────────────────── */
@@ -213,13 +248,8 @@
         }
 
         @keyframes ticker {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* ── MAIN LAYOUT ─────────────────────────────── */
@@ -249,60 +279,26 @@
             }
         }
 
-        /* Spécifique Mobile / iPhone */
+        /* Mobile refinements */
         @media (max-width: 480px) {
             .header-top {
-                display: block;
-                height: auto;
-                padding: 10px 12px 0;
-            }
-
-            .logo-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .status-bar {
-                display: flex;
-                width: calc(100% + 24px);
-                margin: 0 -12px;
-                padding: 10px 12px;
-                background: rgba(0, 201, 177, 0.05);
-                border-top: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-                font-size: 8px;
-                justify-content: flex-start;
-                gap: 6px;
+                padding: 0 10px;
+                height: 48px;
             }
 
             .icon-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
+                width: 34px;
+                height: 34px;
+                font-size: 17px;
             }
 
             .nav-bar {
-                padding: 8px 0;
-                margin-top: 0;
-            }
-        }
-
-        /* Desktop specific */
-        @media (min-width: 481px) {
-            .header-top {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 52px;
-                padding: 0 12px;
+                padding: 6px 0 8px;
             }
 
             .status-bar {
-                margin-left: 20px;
-                flex: 1;
+                font-size: 8px;
+                padding: 4px 10px;
             }
         }
 
@@ -516,75 +512,7 @@
             background: rgba(245, 166, 35, 0.05);
         }
 
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
-            height: var(--header-h);
-            gap: 20px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-        }
-
-        /* ── HEADER STATUS BAR ────────────────────────── */
-        .status-bar {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0;
-            gap: 8px;
-            font-size: 9px;
-            color: var(--grey);
-            background: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .status-sep {
-            color: var(--border);
-            margin: 0 2px;
-        }
-
-        .status-bar .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--green);
-            display: inline-block;
-            margin-right: 4px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: .3
-            }
-        }
-
-        /* Mobile specific adjustments */
-        @media (max-width: 600px) {
-            .header-left {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .status-bar {
-                margin-bottom: 8px;
-            }
-        }
+        /* (duplicate rules removed — see above) */
     </style>
 </head>
 
@@ -592,26 +520,24 @@
 
     <!-- ── HEADER ──────────────────────────────────────── -->
     <header class="header">
+        <!-- Row 1: Logo + Icons (icons always far right) -->
         <div class="header-top">
-            <div class="logo-row">
-                <div class="logo">Global<span class="logo-news">News</span></div>
-                <div class="icon-btns">
-                    <button class="icon-btn" id="theme-btn" title="Mode clair/sombre"><i class="ri-sun-line"></i></button>
-                    <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
-                    <button class="icon-btn" id="notif-btn" title="Notifications"><i
-                            class="ri-notification-off-line"></i></button>
-                </div>
+            <div class="logo">Global<span class="logo-news">News</span></div>
+            <div class="icon-btns">
+                <button class="icon-btn" id="theme-btn" title="Mode clair/sombre"><i class="ri-sun-line"></i></button>
+                <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
+                <button class="icon-btn" id="notif-btn" title="Notifications"><i class="ri-notification-off-line"></i></button>
             </div>
-            <!-- Status Bar -->
-            <div class="status-bar">
-                <span><span class="dot"></span>LIVE</span>
-                <span class="status-sep">|</span>
-                <span id="status-date"></span>
-                <span class="status-sep">|</span>
-                <span id="status-clock"></span>
-                <span class="status-sep">|</span>
-                <span id="status-txt"></span>
-            </div>
+        </div>
+        <!-- Row 2: Status Bar (full width, below logo+icons) -->
+        <div class="status-bar">
+            <span><span class="dot"></span>LIVE</span>
+            <span class="status-sep">|</span>
+            <span id="status-date"></span>
+            <span class="status-sep">|</span>
+            <span id="status-clock"></span>
+            <span class="status-sep">|</span>
+            <span id="status-txt"></span>
         </div>
         <nav class="nav-bar" id="nav-bar">
             <button class="nav-btn active" data-cat="world">Monde</button>
