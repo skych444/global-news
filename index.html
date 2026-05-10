@@ -66,11 +66,11 @@
             border-bottom: 1px solid var(--border);
         }
 
-        /* Row 1: logo + icons */
+        /* Header top row: logo | status-bar | icons */
         .header-top {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            flex-wrap: wrap;          /* allows status-bar to wrap on mobile */
             padding: 0 12px;
             height: var(--header-h);
         }
@@ -81,6 +81,7 @@
             color: var(--white);
             letter-spacing: 3px;
             text-transform: uppercase;
+            flex-shrink: 0;
         }
 
         .logo .logo-news {
@@ -92,7 +93,7 @@
             display: flex;
             gap: 4px;
             align-items: center;
-            margin-left: auto;   /* always push to far right */
+            flex-shrink: 0;
         }
 
         .icon-btn {
@@ -122,24 +123,58 @@
             background: rgba(0, 201, 177, 0.15);
         }
 
-        /* Row 2: status bar — always full width, below logo+icons */
+        /* Status bar — inline on desktop, wraps below on mobile */
         .status-bar {
             display: flex;
             align-items: center;
-            padding: 5px 12px;
             gap: 8px;
             font-size: 9px;
             color: var(--grey);
-            background: rgba(0, 201, 177, 0.04);
-            border-top: 1px solid var(--border);
             text-transform: uppercase;
             letter-spacing: 1px;
-            width: 100%;
             overflow-x: auto;
             scrollbar-width: none;
+            white-space: nowrap;
         }
 
         .status-bar::-webkit-scrollbar { display: none; }
+
+        /* Desktop: inline between logo and icons */
+        @media (min-width: 481px) {
+            .header-top {
+                flex-wrap: nowrap;
+                height: var(--header-h);
+            }
+            .status-bar {
+                flex: 1;
+                margin: 0 16px;
+                padding: 0;
+                background: transparent;
+                border: none;
+            }
+        }
+
+        /* Mobile: wraps below logo+icons */
+        @media (max-width: 480px) {
+            .header-top {
+                height: auto;
+                padding: 0 10px;
+                align-items: center;
+                min-height: 48px;
+            }
+            .status-bar {
+                order: 3;            /* push below logo & icons */
+                width: calc(100% + 20px);
+                margin: 0 -10px;
+                padding: 4px 10px;
+                font-size: 8px;
+                background: rgba(0, 201, 177, 0.04);
+                border-top: 1px solid var(--border);
+            }
+            .icon-btns {
+                margin-left: auto;
+            }
+        }
 
         .status-sep {
             color: var(--border);
@@ -281,11 +316,6 @@
 
         /* Mobile refinements */
         @media (max-width: 480px) {
-            .header-top {
-                padding: 0 10px;
-                height: 48px;
-            }
-
             .icon-btn {
                 width: 34px;
                 height: 34px;
@@ -294,11 +324,6 @@
 
             .nav-bar {
                 padding: 6px 0 8px;
-            }
-
-            .status-bar {
-                font-size: 8px;
-                padding: 4px 10px;
             }
         }
 
@@ -520,24 +545,24 @@
 
     <!-- ── HEADER ──────────────────────────────────────── -->
     <header class="header">
-        <!-- Row 1: Logo + Icons (icons always far right) -->
+        <!-- Desktop: logo | LIVE bar | icons — Mobile: logo + icons / LIVE bar below -->
         <div class="header-top">
             <div class="logo">Global<span class="logo-news">News</span></div>
+            <!-- Status bar: inline on desktop, wraps below on mobile -->
+            <div class="status-bar">
+                <span><span class="dot"></span>LIVE</span>
+                <span class="status-sep">|</span>
+                <span id="status-date"></span>
+                <span class="status-sep">|</span>
+                <span id="status-clock"></span>
+                <span class="status-sep">|</span>
+                <span id="status-txt"></span>
+            </div>
             <div class="icon-btns">
                 <button class="icon-btn" id="theme-btn" title="Mode clair/sombre"><i class="ri-sun-line"></i></button>
                 <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><i class="ri-refresh-line"></i></button>
                 <button class="icon-btn" id="notif-btn" title="Notifications"><i class="ri-notification-off-line"></i></button>
             </div>
-        </div>
-        <!-- Row 2: Status Bar (full width, below logo+icons) -->
-        <div class="status-bar">
-            <span><span class="dot"></span>LIVE</span>
-            <span class="status-sep">|</span>
-            <span id="status-date"></span>
-            <span class="status-sep">|</span>
-            <span id="status-clock"></span>
-            <span class="status-sep">|</span>
-            <span id="status-txt"></span>
         </div>
         <nav class="nav-bar" id="nav-bar">
             <button class="nav-btn active" data-cat="world">Monde</button>
