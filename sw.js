@@ -1,4 +1,4 @@
-const CACHE_NAME = 'global-news-v66';
+const CACHE_NAME = 'global-news-v67';
 const ASSETS = [
     './',
     './index.html',
