@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (rssUrl.includes('bfmtv')) sourceName = 'BFM TV';
             else if (rssUrl.includes('closermag')) sourceName = 'Closer';
             else if (rssUrl.includes('telestar')) sourceName = 'Télé Star';
+            else if (rssUrl.includes('toutelatele')) sourceName = 'Toutelatele';
             else if (rssUrl.includes('lefigaro')) sourceName = 'Le Figaro';
             
             // Conversion de la date pour correspondre au format précédent
@@ -382,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'media') {
                 rssUrls = [
-                    'https://www.lemonde.fr/actualite-medias/rss_full.xml',
+                    'https://www.toutelatele.com/spip.php?page=backend',
                     'https://www.telestar.fr/feed'
                 ];
             }
