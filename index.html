@@ -644,14 +644,14 @@
     </div>
 
     <div style="text-align:center; padding: 20px; font-size: 8px; color: var(--border); letter-spacing: 2px;">
-        VERSION 65
+        VERSION 66
     </div>
 
 
 
     <script>
         // Force update if version mismatch
-        const CURRENT_VERSION = '65';
+        const CURRENT_VERSION = '66';
         if (localStorage.getItem('app-version') !== CURRENT_VERSION) {
             if ('serviceWorker' in navigator) {
                 caches.keys().then(names => {
@@ -872,52 +872,107 @@
             'GC=F': 'OR',
             'BZ=F': 'BRENT'
         };
+        const MARKET_CACHE_KEY = 'market-data-cache-v1';
+
+        // Plusieurs proxys CORS de secours : Yahoo Finance ne peut pas être
+        // appelé directement depuis le navigateur, et le proxy public utilisé
+        // peut tomber en panne (surcharge, quota). On essaie chacun à son tour.
+        function buildProxyUrls(targetUrl) {
+            const encoded = encodeURIComponent(targetUrl);
+            return [
+                `https://api.allorigins.win/raw?url=${encoded}`,
+                `https://corsproxy.io/?url=${encoded}`,
+                `https://api.codetabs.com/v1/proxy?quest=${encoded}`,
+            ];
+        }
+
+        async function fetchWithTimeout(url, ms) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), ms);
+            try {
+                return await fetch(url, { signal: controller.signal });
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
+        async function fetchYahooQuotes(symbols) {
+            const targetUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
+            const proxies = buildProxyUrls(targetUrl);
+
+            for (const proxyUrl of proxies) {
+                try {
+                    const response = await fetchWithTimeout(proxyUrl, 7000);
+                    if (!response.ok) continue;
+                    const json = await response.json();
+                    const quotes = json && json.quoteResponse && json.quoteResponse.result;
+                    if (quotes && quotes.length) return quotes;
+                } catch (e) {
+                    // essaie le proxy suivant
+                }
+            }
+            return null;
+        }
+
+        function renderMarketData(quotes) {
+            const tickerTrack = document.getElementById('ticker-track');
+            let tickerHTML = '';
+
+            quotes.forEach(q => {
+                const sym = q.symbol;
+                if (q.regularMarketPrice == null) return;
+                const price = q.regularMarketPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 });
+                const change = q.regularMarketChangePercent ? q.regularMarketChangePercent.toFixed(2) : '0.00';
+                const isUp = q.regularMarketChangePercent >= 0;
+                const arrow = isUp ? '▲' : '▼';
+                const cls = isUp ? 'up' : 'dn';
+                const name = TICKERS[sym] || sym;
+
+                // Update Sidebar Table
+                const idBase = sym.replace('^', '').replace('=X', '').replace('=F', '');
+                const valEl = document.getElementById(`val-${idBase}`);
+                const chgEl = document.getElementById(`chg-${idBase}`);
+
+                if (valEl) valEl.textContent = price + (sym.includes('USD') || sym.includes('=F') ? ' $' : '');
+                if (chgEl) {
+                    chgEl.textContent = (isUp ? '+' : '') + change + '%';
+                    chgEl.className = cls;
+                }
+
+                tickerHTML += `<span class="ticker-item">${name} <span class="${cls}">${arrow} ${price}</span></span>`;
+            });
+
+            if (tickerTrack && tickerHTML) {
+                tickerTrack.innerHTML = tickerHTML + tickerHTML;
+            }
+        }
 
         async function fetchMarketData() {
             const symbols = Object.keys(TICKERS).join(',');
-            const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
 
             try {
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
-                if (!data.contents) return;
+                const quotes = await fetchYahooQuotes(symbols);
 
-                const json = JSON.parse(data.contents);
-                const quotes = json.quoteResponse.result;
-
-                const tickerTrack = document.getElementById('ticker-track');
-                let tickerHTML = '';
-
-                quotes.forEach(q => {
-                    const sym = q.symbol;
-                    const price = q.regularMarketPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 });
-                    const change = q.regularMarketChangePercent ? q.regularMarketChangePercent.toFixed(2) : '0.00';
-                    const isUp = q.regularMarketChangePercent >= 0;
-                    const arrow = isUp ? '▲' : '▼';
-                    const cls = isUp ? 'up' : 'dn';
-                    const name = TICKERS[sym] || sym;
-
-                    // Update Sidebar Table
-                    const idBase = sym.replace('^', '').replace('=X', '').replace('=F', '');
-                    const valEl = document.getElementById(`val-${idBase}`);
-                    const chgEl = document.getElementById(`chg-${idBase}`);
-
-                    if (valEl) valEl.textContent = price + (sym.includes('USD') || sym.includes('=F') ? ' $' : '');
-                    if (chgEl) {
-                        chgEl.textContent = (isUp ? '+' : '') + change + '%';
-                        chgEl.className = cls;
-                    }
-
-                    tickerHTML += `<span class="ticker-item">${name} <span class="${cls}">${arrow} ${price}</span></span>`;
-                });
-
-                if (tickerTrack && tickerHTML) {
-                    tickerTrack.innerHTML = tickerHTML + tickerHTML;
+                if (quotes) {
+                    renderMarketData(quotes);
+                    localStorage.setItem(MARKET_CACHE_KEY, JSON.stringify({ quotes, ts: Date.now() }));
+                    return;
                 }
 
+                throw new Error('Aucun proxy disponible');
             } catch (e) {
                 console.error('Market data error:', e);
+                // En cas d'échec, on affiche les dernières données connues
+                // plutôt que de laisser le ticker bloqué sur "Chargement...".
+                const cached = localStorage.getItem(MARKET_CACHE_KEY);
+                if (cached) {
+                    try {
+                        renderMarketData(JSON.parse(cached).quotes);
+                    } catch (parseErr) { /* cache corrompu, on ignore */ }
+                } else {
+                    const tickerTrack = document.getElementById('ticker-track');
+                    if (tickerTrack) tickerTrack.innerHTML = '<span class="ticker-item">Marchés indisponibles</span>';
+                }
             }
         }
 
