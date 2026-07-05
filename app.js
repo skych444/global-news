@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (rssUrl.includes('france24')) sourceName = 'France 24';
             else if (rssUrl.includes('bfmtv')) sourceName = 'BFM TV';
             else if (rssUrl.includes('closermag')) sourceName = 'Closer';
-            else if (rssUrl.includes('ozap')) sourceName = 'PureMédias';
+            else if (rssUrl.includes('telestar')) sourceName = 'Télé Star';
             else if (rssUrl.includes('lefigaro')) sourceName = 'Le Figaro';
             
             // Conversion de la date pour correspondre au format précédent
@@ -382,8 +382,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             } else if (category === 'media') {
                 rssUrls = [
-                    'https://www.lefigaro.fr/rss/figaro_medias.xml',
-                    'https://www.ozap.com/news.rss' // PureMédias
+                    'https://www.lemonde.fr/actualite-medias/rss_full.xml',
+                    'https://www.telestar.fr/feed'
                 ];
             }
 

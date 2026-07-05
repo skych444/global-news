@@ -644,14 +644,14 @@
     </div>
 
     <div style="text-align:center; padding: 20px; font-size: 8px; color: var(--border); letter-spacing: 2px;">
-        VERSION 66
+        VERSION 67
     </div>
 
 
 
     <script>
         // Force update if version mismatch
-        const CURRENT_VERSION = '66';
+        const CURRENT_VERSION = '67';
         if (localStorage.getItem('app-version') !== CURRENT_VERSION) {
             if ('serviceWorker' in navigator) {
                 caches.keys().then(names => {
@@ -759,13 +759,13 @@
             france: ['https://www.leparisien.fr/arc/outboundfeeds/rss/all/', 'https://www.lemonde.fr/france/rss_full.xml', 'https://www.lefigaro.fr/rss/figaro_actualites.xml'],
             business: ['https://www.lemonde.fr/economie/rss_full.xml', 'https://www.lefigaro.fr/rss/figaro_economie.xml', 'https://www.france24.com/fr/eco-tech/rss', 'https://www.latribune.fr/feed.xml'],
             people: ['https://www.20minutes.fr/feeds/rss-people.xml', 'https://www.voici.fr/rss'],
-            media: ['https://www.lefigaro.fr/rss/figaro_medias.xml', 'https://www.ozap.com/news.rss']
+            media: ['https://www.lemonde.fr/actualite-medias/rss_full.xml', 'https://www.telestar.fr/feed']
         };
 
         const SOURCE_NAMES = {
             'lemonde.fr': 'Le Monde', 'france24': 'France 24', 'lefigaro': 'Le Figaro',
             'leparisien': 'Le Parisien', 'bfmtv': 'BFM TV', 'latribune': 'La Tribune',
-            '20minutes': '20 Minutes', 'voici': 'Voici', 'ozap': 'PureMédias'
+            '20minutes': '20 Minutes', 'voici': 'Voici', 'telestar': 'Télé Star'
         };
 
         function getSourceName(url) {
